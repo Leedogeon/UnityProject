@@ -5,36 +5,38 @@ using UnityEngine;
 
 public class script : MonoBehaviour
 {
-    private Rigidbody rigidbody;
+    private Rigidbody rigid;
     public float speed = 10f;
     public float jump = 5f;
-    public float TurnSpeed = 3f;
-
-    private Vector3 dir = Vector3.zero;
+    public float turnSpeed = 3f;
+    public Vector3 moveVec;
+    private float xAxis;
+    private float zAxis;
     void Start()
     {
-        rigidbody = this.GetComponent<Rigidbody>();
+        rigid = GetComponent<Rigidbody>();
     }
 
     void Update()
     {
         GetInput();
         Move();
-
+        Turn();
     }
     void GetInput()
     {
-        dir.x = Input.GetAxis("Horizontal");
-        dir.z = Input.GetAxis("Vertical");
+        xAxis = Input.GetAxisRaw("Horizontal");
+        zAxis = Input.GetAxisRaw("Vertical");
+        moveVec = new Vector3(xAxis, 0, zAxis).normalized;
     }
     void Move()
     {
-        if (dir != Vector3.zero)
-        {
-            transform.forward = dir;
-            transform.position += dir * speed * 1f * Time.deltaTime;
-        }
-
+        transform.position += speed * moveVec * Time.deltaTime;
+    }
+    void Turn()
+    {
+        transform.LookAt(transform.position + moveVec);
+        //transform.forward = Vector3.Lerp(transform.forward, moveVec, turnSpeed * Time.deltaTime);
     }
 
 }
