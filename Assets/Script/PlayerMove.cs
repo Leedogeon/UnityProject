@@ -14,6 +14,8 @@ public class script : MonoBehaviour
     private float zAxis;
     private bool jDown;
     private bool fDown;
+    private bool isJump = false;
+    public Camera FollowCamera;
     void Start()
     {
         rigid = GetComponent<Rigidbody>();
@@ -43,14 +45,24 @@ public class script : MonoBehaviour
     {
         transform.LookAt(transform.position + moveVec);
         //transform.forward = Vector3.Lerp(transform.forward, moveVec, turnSpeed * Time.deltaTime);
+
     }
     void Jump()
     {
-        if (jDown)
+        if (jDown && !isJump)
         {
+            isJump = true;
             rigid.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
         }
         
+    }
+    void OnCollisionEnter(Collision collision)
+    {
+        //바닥에 닿았을때 점프키 재활성화
+        if (collision.gameObject.tag == "Floor")
+        {
+            isJump = false;
+        }
     }
     void Attack()
     {
