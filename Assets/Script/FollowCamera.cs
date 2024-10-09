@@ -6,10 +6,10 @@ using UnityEngine;
 public class Follow : MonoBehaviour
 {
     public Transform target;
+    public float pLerp = .02f;
+    public float rLerp = .01f;
     public Vector3 offset;
-    public Vector2 turn;
-    public float maxX = 45;
-    public float MaxY = 30;
+    public float offsetRadius;
 
     void Start()
     {
@@ -17,11 +17,11 @@ public class Follow : MonoBehaviour
     }
     void Update()
     {
+        offset.x = -target.forward.x* offsetRadius;
+        offset.z = -target.forward.z* offsetRadius;
+        transform.position = Vector3.Lerp(transform.position, target.position, pLerp);
+        transform.rotation = Quaternion.Lerp(transform.rotation, target.rotation, rLerp);
         transform.position = target.position + offset;
-        turn.x += Input.GetAxisRaw("Mouse X");
-        turn.x = Mathf.Clamp(turn.x, -maxX, maxX);
-        turn.y += Input.GetAxisRaw("Mouse Y");
-        turn.y = Mathf.Clamp(turn.y, -60, MaxY);
-        transform.localRotation = Quaternion.Euler(-turn.y,turn.x, 0);
+
     }
 }
