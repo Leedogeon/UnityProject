@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour
+public class RopeAction: MonoBehaviour
 {
     public Transform Player;
     public Transform RopeArm;
@@ -19,9 +19,17 @@ public class NewBehaviourScript : MonoBehaviour
     public float Length; //Rope±Ê¿Ã
     private bool IsGrappling = false;
     private bool IsAttach = false;
+
+    [SerializeField] private PlayerMove moveScript;
     void Start()
     {
         Lr = GetComponent<LineRenderer>();
+
+        if (Player != null)
+        {
+            moveScript = Player.GetComponent<PlayerMove>();
+        }
+
     }
 
     void Update()
@@ -88,6 +96,9 @@ public class NewBehaviourScript : MonoBehaviour
         Vector3 ToTarget = (hit.point - Player.position).normalized;
         float RopeForce = 20f;
         PlayerRigid.AddForce(ToTarget*RopeForce, ForceMode.Impulse);
+        if (moveScript.jumpCount == 0)
+            moveScript.jumpCount++;
+
         EndShoot();
     }
 }
