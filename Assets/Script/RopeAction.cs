@@ -1,33 +1,74 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class NewBehaviourScript : MonoBehaviour
 {
-    // Start is called before the first frame update
-
     public Transform Player;
-    Camera cam;
-    RaycastHit hit;
+    public Transform Head;
+    public Transform RopeArm;
+    public RaycastHit hit;
     public LayerMask HitLayer;
+    public float Length;
+    public LineRenderer Lr;
+    private bool IsGrappling = false;
+    public Transform RopePoint;
+    public SpringJoint Sj;
     void Start()
     {
-        
+        Lr = GetComponent<LineRenderer>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetButtonDown("Fire"))
         {
             RopeShoot();
         }
+        else if(Input.GetButtonUp("Fire"))
+        {
+            EndShoot();
+        }
+        if(IsGrappling)
+        {
+            DrawRope();
+        }
+        
     }
     void RopeShoot()
     {
-        if(Physics.Raycast(cam.transform.position,cam.transform.forward,out hit, 100f, HitLayer))
+        if(Physics.Raycast(RopeArm.transform.position,RopeArm.transform.forward,out hit, Length, HitLayer))
         {
-            print("RopeAction");
+            IsGrappling = true;
+
+            Lr.positionCount = 2;
+            Lr.SetPosition(1, hit.point);
+            Sj = Player.gameObject.AddComponent<SpringJoint>();
+            //앵커의 위치 자동설정 false
+            Sj.autoConfigureConnectedAnchor = false;
+            Sj.connectedAnchor = hit.point;
+
+            float distance = Vector3.Distance(transform.position,hit.point);
+            Sj.maxDistance = distance;
+            Sj.minDistance = distance * .5f;
+            Sj.spring = 5f; //강도
+            Sj.damper = 5f; //줄어드는 힘
+            Sj.massScale = 5f;
         }
+    }
+    void EndShoot()
+    {
+        IsGrappling = false;
+        Lr.positionCount = 0;
+        Destroy(Sj);
+    }
+    void DrawRope()
+    {
+        if(IsGrappling)
+        {
+            Lr.SetPosition(0,RopePoint.position);
+        }
+
     }
 }

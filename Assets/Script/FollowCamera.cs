@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class Follow : MonoBehaviour
@@ -10,7 +11,6 @@ public class Follow : MonoBehaviour
     public float rLerp = .01f;
     public Vector3 offset;
     public float offsetRadius;
-
     void Start()
     {
        Cursor.lockState = CursorLockMode.Locked;   

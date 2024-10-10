@@ -4,9 +4,11 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class script : MonoBehaviour
+public class PlayerMove : MonoBehaviour
 {
     private Rigidbody rigid;
+    public Transform Head;
+    public Transform RopeArm;
     public float speed = 10f;
     public float turnSpeed = 3f;
     public Vector3 moveVec;
@@ -42,7 +44,6 @@ public class script : MonoBehaviour
     {
         xAxis = Input.GetAxisRaw("Horizontal");
         zAxis = Input.GetAxisRaw("Vertical");
-        moveVec = new Vector3(xAxis, 0, zAxis);
         jDown = Input.GetButtonDown("Jump");
         fDown = Input.GetButtonDown("Fire");
         
@@ -58,14 +59,17 @@ public class script : MonoBehaviour
     }
     void Turn()
     {
-        //transform.LookAt(transform.position + moveVec);
-        //transform.forward = Vector3.Lerp(transform.forward, moveVec, turnSpeed * Time.deltaTime);
         turn.x += Input.GetAxisRaw("Mouse X");
-        //turn.x = Mathf.Clamp(turn.x, -maxX, maxX);
         turn.y += Input.GetAxisRaw("Mouse Y");
-        turn.y = Mathf.Clamp(turn.y, -60, MaxY);
+        //turn.y = Mathf.Clamp(turn.y, -60, MaxY);
+        
         transform.localRotation = Quaternion.Euler(0, turn.x, 0);
         FollowCamera.transform.localRotation = Quaternion.Euler(-turn.y, turn.x, 0);
+
+        //Vector3 forwardDirection = new Vector3(FollowCamera.transform.forward.x, FollowCamera.transform.forward.y, FollowCamera.transform.forward.z);
+        //Head.transform.localRotation = Quaternion.Euler(-turn.y,turn.x, 0);
+        RopeArm.transform.localRotation = Quaternion.Euler(-turn.y - 30, 0, 0);
+
     }
     void Jump()
     {
@@ -94,9 +98,6 @@ public class script : MonoBehaviour
     }
     void Attack()
     {
-        if(fDown)
-        {
-            print("test");
-        }
+
     }
 }
