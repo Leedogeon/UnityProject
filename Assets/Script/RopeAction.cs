@@ -1,20 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class NewBehaviourScript : MonoBehaviour
 {
     public Transform Player;
-    public Transform Head;
     public Transform RopeArm;
     public RaycastHit hit;
     public LayerMask HitLayer;
-    public float Length;
-    public LineRenderer Lr;
-    private bool IsGrappling = false;
+
+    public LineRenderer Lr; 
     public Transform RopePoint;
     public SpringJoint Sj;
+
+    public float Length; //Rope±Ê¿Ã
+    private bool IsGrappling = false;
+    private bool IsAttach = false;
     void Start()
     {
         Lr = GetComponent<LineRenderer>();
@@ -30,9 +34,14 @@ public class NewBehaviourScript : MonoBehaviour
         {
             EndShoot();
         }
+
         if(IsGrappling)
         {
             DrawRope();
+            if(Input.GetButton("Fire2") && !IsAttach)
+            {
+                Attach();
+            }
         }
         
     }
@@ -62,6 +71,7 @@ public class NewBehaviourScript : MonoBehaviour
         IsGrappling = false;
         Lr.positionCount = 0;
         Destroy(Sj);
+        IsAttach = false;
     }
     void DrawRope()
     {
@@ -70,5 +80,14 @@ public class NewBehaviourScript : MonoBehaviour
             Lr.SetPosition(0,RopePoint.position);
         }
 
+    }
+    void Attach()
+    {
+        IsAttach = true;
+        Rigidbody PlayerRigid = Player.GetComponent<Rigidbody>();
+        Vector3 ToTarget = (hit.point - Player.position).normalized;
+        float RopeForce = 20f;
+        PlayerRigid.AddForce(ToTarget*RopeForce, ForceMode.Impulse);
+        EndShoot();
     }
 }
