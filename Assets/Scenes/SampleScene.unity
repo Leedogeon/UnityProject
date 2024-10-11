@@ -1299,9 +1299,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Head: {fileID: 1556164229}
   RopeArm: {fileID: 2056691015}
+  CurPos: {x: 0, y: 0, z: 0}
   speed: 10
   turnSpeed: 3
-  moveVec: {x: 0, y: 0, z: 0}
   jumpPower: 5
   jumpCount: 1
   jumpCountBase: 1
@@ -1310,6 +1310,9 @@ MonoBehaviour:
   turn: {x: 0, y: 0}
   maxX: 45
   MaxY: 30
+  Info:
+    Level: 0
+    HP: 0
 --- !u!1 &1872474973
 GameObject:
   m_ObjectHideFlags: 0
@@ -1759,7 +1762,7 @@ MonoBehaviour:
   RopePoint: {fileID: 1503161045}
   Sj: {fileID: 0}
   Length: 30
-  moveScript: {fileID: 0}
+  ActionScript: {fileID: 0}
 --- !u!120 &2056691020
 LineRenderer:
   serializedVersion: 2

@@ -1,17 +1,19 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static Cinemachine.DocumentationSortingAttribute;
 
-public class PlayerMove : MonoBehaviour
+public class PlayerAction : MonoBehaviour
 {
     private Rigidbody rigid;
     public Transform Head;
     public Transform RopeArm;
+    public Vector3 CurPos;
     public float speed = 10f;
     public float turnSpeed = 3f;
-    public Vector3 moveVec;
     private float xAxis;
     private float zAxis;
     private bool jDown;
@@ -24,11 +26,29 @@ public class PlayerMove : MonoBehaviour
     public bool jumpSkill1 = false;
     private bool IsFall;
 
-
     public Camera FollowCamera;
     public Vector2 turn;
     public float maxX = 45;
     public float MaxY = 30;
+
+    public PlayerInfo Info = new PlayerInfo();
+    public void SavePlayer()
+    {
+        Save.SavePlayer(this, Info);
+    }
+
+    public void LoadPlayer()
+    {
+        PlayerDataSave data = Save.LoadPlayer(this, Info);
+
+        Info.Level = data.Level;
+        Info.HP = data.HP;
+
+        CurPos.x = data.position[0];
+        CurPos.y = data.position[1];
+        CurPos.z = data.position[2];
+        transform.position = CurPos;
+    }
     void Start()
     {
         rigid = GetComponent<Rigidbody>();
@@ -57,11 +77,23 @@ public class PlayerMove : MonoBehaviour
             jumpCountBase = 2;
         else
             jumpCountBase = 1;
+
+        if (Input.GetButtonDown("Save"))
+        {
+            SavePlayer();
+        }
+
+        if (Input.GetButtonDown("Load"))
+        {
+            LoadPlayer();
+        }
     }
     void Move()
     {
         transform.Translate(Vector3.forward * zAxis * Time.deltaTime * speed);
         transform.Translate(Vector3.right * xAxis * Time.deltaTime * speed);
+        CurPos = transform.position;
+        
     }
     void Turn()
     {
@@ -82,7 +114,6 @@ public class PlayerMove : MonoBehaviour
         {
             isJump = true;
             rigid.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
-            print("jump");
         }
         else if(jDown && jumpCount >=1 && IsFall)
         {
@@ -90,7 +121,6 @@ public class PlayerMove : MonoBehaviour
             rigid.velocity = Vector3.zero;
             rigid.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
             jumpCount--;
-            print("DoubleJump");
         }
         
     }
@@ -99,7 +129,6 @@ public class PlayerMove : MonoBehaviour
         //바닥에 닿았을때 점프키 재활성화
         if (collision.gameObject.tag == "Floor")
         {
-            print("Test");
             isJump = false;
             IsFall = false;
             jumpCount = jumpCountBase;
