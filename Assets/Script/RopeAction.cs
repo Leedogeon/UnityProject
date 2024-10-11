@@ -9,12 +9,15 @@ public class RopeAction: MonoBehaviour
 {
     public Transform Player;
     public Transform RopeArm;
+    public Camera FollowCamera;
     public RaycastHit hit;
     public LayerMask HitLayer;
 
     public LineRenderer Lr; 
     public Transform RopePoint;
     public SpringJoint Sj;
+
+    Transform RTrans;
 
     public float Length; //Rope±Ê¿Ã
     private bool IsGrappling = false;
@@ -35,7 +38,7 @@ public class RopeAction: MonoBehaviour
     void Update()
     {
         if(Input.GetButtonDown("Fire"))
-        {
+        { 
             RopeShoot();
         }
         else if(Input.GetButtonUp("Fire"))
@@ -51,11 +54,14 @@ public class RopeAction: MonoBehaviour
                 Attach();
             }
         }
-        
+        RTrans = FollowCamera.transform;
+        RTrans.transform.localRotation = Quaternion.Euler(-15, 0, 0);
+
     }
     void RopeShoot()
     {
-        if(Physics.Raycast(RopeArm.transform.position,RopeArm.transform.forward,out hit, Length, HitLayer))
+        
+        if (Physics.Raycast(RopeArm.transform.position,RTrans.transform.forward,out hit, Length, HitLayer))
         {
             IsGrappling = true;
 

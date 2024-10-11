@@ -35,6 +35,7 @@ public class PlayerAction : MonoBehaviour
     public void SavePlayer()
     {
         Save.SavePlayer(this, Info);
+        print("Save Game");
     }
 
     public void LoadPlayer()
@@ -48,6 +49,7 @@ public class PlayerAction : MonoBehaviour
         CurPos.y = data.position[1];
         CurPos.z = data.position[2];
         transform.position = CurPos;
+        print("Load Game");
     }
     void Start()
     {
@@ -79,13 +81,14 @@ public class PlayerAction : MonoBehaviour
             jumpCountBase = 1;
 
         if (Input.GetButtonDown("Save"))
-        {
             SavePlayer();
-        }
 
         if (Input.GetButtonDown("Load"))
-        {
             LoadPlayer();
+        if(Input.GetButton("Test"))
+        {
+            Info.Level += 1;
+            Info.HP += 1;
         }
     }
     void Move()
