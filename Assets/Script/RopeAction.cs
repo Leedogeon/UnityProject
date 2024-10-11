@@ -20,14 +20,14 @@ public class RopeAction: MonoBehaviour
     private bool IsGrappling = false;
     private bool IsAttach = false;
 
-    [SerializeField] private PlayerMove moveScript;
+    [SerializeField] private PlayerAction ActionScript;
     void Start()
     {
         Lr = GetComponent<LineRenderer>();
 
         if (Player != null)
         {
-            moveScript = Player.GetComponent<PlayerMove>();
+            ActionScript = Player.GetComponent<PlayerAction>();
         }
 
     }
@@ -96,8 +96,8 @@ public class RopeAction: MonoBehaviour
         Vector3 ToTarget = (hit.point - Player.position).normalized;
         float RopeForce = 20f;
         PlayerRigid.AddForce(ToTarget*RopeForce, ForceMode.Impulse);
-        if (moveScript.jumpCount == 0)
-            moveScript.jumpCount++;
+        if (ActionScript.jumpCount == 0)
+            ActionScript.jumpCount++;
 
         EndShoot();
     }
