@@ -29,7 +29,6 @@ public class PlayerAction : MonoBehaviour
     public bool IsFall;
 
     [SerializeField] private RopeAction Rope;
-    private float InAirSpeed;
     //Dash
     private bool bDash;
 
@@ -95,7 +94,6 @@ public class PlayerAction : MonoBehaviour
 
         if (Input.GetButtonDown("Load"))
             LoadPlayer();
-        if (Rope.IsGrappling) InAirSpeed = .7f; else InAirSpeed = 1f;
     }
     void Move()
     {

@@ -83,8 +83,6 @@ public class RopeAction : MonoBehaviour
             Sj.damper = 5f; //ÁÙ¾îµå´Â Èû
             Sj.massScale = 5f;
 
-
-
         }
 
 
@@ -94,14 +92,11 @@ public class RopeAction : MonoBehaviour
     {
 
         Rigidbody PlayerRigid = Player.GetComponent<Rigidbody>();
-        if (ActionScript.IsFall)
-        {
-            Vector3 ToTarget = (hit.point - Player.position).normalized;
-            float RopeForce = .05f;
-            PlayerRigid.AddForce(ToTarget * RopeForce, ForceMode.Impulse);
 
+        Vector3 ToTarget = (hit.point - Player.position).normalized;
+        float RopeForce = .05f;
+        PlayerRigid.AddForce(ToTarget * RopeForce, ForceMode.Impulse);
 
-        }
         if (ActionScript.xAxis != 0 || ActionScript.zAxis != 0)
         {
             PlayerRigid.AddForce(Player.forward * ActionScript.zAxis * .1f);
