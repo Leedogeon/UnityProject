@@ -9,8 +9,10 @@ using static Cinemachine.DocumentationSortingAttribute;
 public class PlayerAction : MonoBehaviour
 {
     private Rigidbody rigid;
-    public Transform Head;
+    private Animator anim;
     public Transform RopeArm;
+
+    //Move
     public Vector3 CurPos;
     public float speed = 10f;
     public float turnSpeed = 3f;
@@ -25,7 +27,10 @@ public class PlayerAction : MonoBehaviour
     public float jumpCountBase = 1;
     public bool jumpSkill1 = false;
     private bool IsFall;
+    //Dash
+    private bool bDash;
 
+    //Camera
     public Camera FollowCamera;
     public Vector2 turn;
     public float maxX = 45;
@@ -54,6 +59,7 @@ public class PlayerAction : MonoBehaviour
     void Start()
     {
         rigid = GetComponent<Rigidbody>();
+        anim = GetComponentInChildren<Animator>();
     }
 
     void Update()
@@ -71,7 +77,7 @@ public class PlayerAction : MonoBehaviour
         zAxis = Input.GetAxisRaw("Vertical");
         jDown = Input.GetButtonDown("Jump");
         fDown = Input.GetButtonDown("Fire");
-
+        bDash = Input.GetButton("Dash");
         if (rigid.velocity.y > .05f || rigid.velocity.y < -.05f ) IsFall = true;
         else IsFall = false;
 
@@ -85,16 +91,13 @@ public class PlayerAction : MonoBehaviour
 
         if (Input.GetButtonDown("Load"))
             LoadPlayer();
-        if(Input.GetButton("Test"))
-        {
-            Info.Level += 1;
-            Info.HP += 1;
-        }
     }
     void Move()
     {
-        transform.Translate(Vector3.forward * zAxis * Time.deltaTime * speed);
-        transform.Translate(Vector3.right * xAxis * Time.deltaTime * speed);
+        anim.SetBool("IsWalk", xAxis != 0 || zAxis !=0);
+        anim.SetBool("IsRun", bDash);
+        transform.Translate(Vector3.forward * zAxis * Time.deltaTime * speed * (bDash ? 2f:1f));
+        transform.Translate(Vector3.right * xAxis * Time.deltaTime * speed * (bDash ? 2f : 1f));
         CurPos = transform.position;
         
     }
@@ -107,7 +110,6 @@ public class PlayerAction : MonoBehaviour
         transform.localRotation = Quaternion.Euler(0, turn.x, 0);
         FollowCamera.transform.localRotation = Quaternion.Euler(-turn.y, turn.x, 0);
 
-        //Head.transform.localRotation = Quaternion.Euler(-turn.y,turn.x, 0);
         //RopeArm.transform.localRotation = Quaternion.Euler(-turn.y - 15, 0, 0);
 
     }

@@ -100,7 +100,7 @@ public class RopeAction: MonoBehaviour
         IsAttach = true;
         Rigidbody PlayerRigid = Player.GetComponent<Rigidbody>();
         Vector3 ToTarget = (hit.point - Player.position).normalized;
-        float RopeForce = 30f;
+        float RopeForce = 20f;
         PlayerRigid.AddForce(ToTarget*RopeForce, ForceMode.Impulse);
         if (ActionScript.jumpCount == 0)
             ActionScript.jumpCount++;
