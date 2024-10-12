@@ -55,7 +55,7 @@ public class RopeAction: MonoBehaviour
             }
         }
         RTrans = FollowCamera.transform;
-        RTrans.transform.localRotation = Quaternion.Euler(-15, 0, 0);
+        RTrans.transform.localRotation = Quaternion.Euler(-25, 0, 0);
 
     }
     void RopeShoot()
@@ -75,9 +75,9 @@ public class RopeAction: MonoBehaviour
             float distance = Vector3.Distance(transform.position,hit.point);
             Sj.maxDistance = distance;
             Sj.minDistance = distance * .5f;
-            Sj.spring = 5f; //강도
-            Sj.damper = 5f; //줄어드는 힘
-            Sj.massScale = 5f;
+            Sj.spring = 8f; //강도
+            Sj.damper = 8f; //줄어드는 힘
+            Sj.massScale = 8f;
         }
     }
     void EndShoot()
@@ -100,7 +100,7 @@ public class RopeAction: MonoBehaviour
         IsAttach = true;
         Rigidbody PlayerRigid = Player.GetComponent<Rigidbody>();
         Vector3 ToTarget = (hit.point - Player.position).normalized;
-        float RopeForce = 20f;
+        float RopeForce = 30f;
         PlayerRigid.AddForce(ToTarget*RopeForce, ForceMode.Impulse);
         if (ActionScript.jumpCount == 0)
             ActionScript.jumpCount++;
