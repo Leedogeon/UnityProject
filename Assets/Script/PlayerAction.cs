@@ -16,8 +16,8 @@ public class PlayerAction : MonoBehaviour
     public Vector3 CurPos;
     public float speed = 10f;
     public float turnSpeed = 3f;
-    private float xAxis;
-    private float zAxis;
+    public float xAxis;
+    public float zAxis;
     private bool jDown;
     private bool fDown;
     //jump
@@ -26,7 +26,10 @@ public class PlayerAction : MonoBehaviour
     public float jumpCount = 1;
     public float jumpCountBase = 1;
     public bool jumpSkill1 = false;
-    private bool IsFall;
+    public bool IsFall;
+
+    [SerializeField] private RopeAction Rope;
+    private float InAirSpeed;
     //Dash
     private bool bDash;
 
@@ -60,6 +63,7 @@ public class PlayerAction : MonoBehaviour
     {
         rigid = GetComponent<Rigidbody>();
         anim = GetComponentInChildren<Animator>();
+        Rope = gameObject.GetComponentInChildren<RopeAction>();
     }
 
     void Update()
@@ -91,15 +95,18 @@ public class PlayerAction : MonoBehaviour
 
         if (Input.GetButtonDown("Load"))
             LoadPlayer();
+        if (Rope.IsGrappling) InAirSpeed = .7f; else InAirSpeed = 1f;
     }
     void Move()
     {
-        anim.SetBool("IsWalk", xAxis != 0 || zAxis !=0);
-        anim.SetBool("IsRun", bDash);
-        transform.Translate(Vector3.forward * zAxis * Time.deltaTime * speed * (bDash ? 2f:1f));
-        transform.Translate(Vector3.right * xAxis * Time.deltaTime * speed * (bDash ? 2f : 1f));
-        CurPos = transform.position;
-        
+        if (!Rope.IsGrappling || !IsFall)
+        {
+            anim.SetBool("IsWalk", xAxis != 0 || zAxis != 0);
+            anim.SetBool("IsRun", bDash);
+            transform.Translate(Vector3.forward * zAxis * Time.deltaTime * speed * (bDash ? 2f : 1f));
+            transform.Translate(Vector3.right * xAxis * Time.deltaTime * speed * (bDash ? 2f : 1f));
+            CurPos = transform.position;
+        }
     }
     void Turn()
     {

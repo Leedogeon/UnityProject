@@ -6,7 +6,7 @@ using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-public class RopeAction: MonoBehaviour
+public class RopeAction : MonoBehaviour
 {
     public Transform Player;
     public Transform RopeArm;
@@ -14,13 +14,13 @@ public class RopeAction: MonoBehaviour
     public RaycastHit hit;
     public LayerMask HitLayer;
 
-    public LineRenderer Lr; 
+    public LineRenderer Lr;
     public Transform RopePoint;
     public SpringJoint Sj;
 
     Vector3 newForward;
     public float Length; //Rope길이
-    private bool IsGrappling = false;
+    public bool IsGrappling = false;
     private bool IsAttach = false;
 
     [SerializeField] private PlayerAction ActionScript;
@@ -31,37 +31,41 @@ public class RopeAction: MonoBehaviour
         if (Player != null)
         {
             ActionScript = Player.GetComponent<PlayerAction>();
+
         }
 
     }
 
     void Update()
     {
-        if(Input.GetButtonDown("Fire"))
-        { 
+        if (Input.GetButtonDown("Fire"))
+        {
             RopeShoot();
         }
-        else if(Input.GetButtonUp("Fire"))
+        else if (Input.GetButtonUp("Fire"))
         {
             EndShoot();
         }
 
-        if(IsGrappling)
+        if (IsGrappling)
         {
             DrawRope();
-            if(Input.GetButton("Fire2") && !IsAttach)
+            if (Input.GetButton("Fire2") && !IsAttach)
             {
                 Attach();
             }
         }
         newForward = Quaternion.LookRotation(FollowCamera.transform.forward) * Quaternion.Euler(-7.5f, 0, 0) * Vector3.forward;
 
-
+        if (ActionScript.IsFall && IsGrappling)
+        {
+            RopeSwing();
+        }
     }
     void RopeShoot()
     {
-        
-        if (Physics.Raycast(RopeArm.transform.position, newForward,out hit, Length, HitLayer))
+
+        if (Physics.Raycast(RopeArm.transform.position, newForward, out hit, Length, HitLayer))
         {
             IsGrappling = true;
 
@@ -72,13 +76,38 @@ public class RopeAction: MonoBehaviour
             Sj.autoConfigureConnectedAnchor = false;
             Sj.connectedAnchor = hit.point;
 
-            float distance = Vector3.Distance(transform.position,hit.point);
+            float distance = Vector3.Distance(transform.position, hit.point);
             Sj.maxDistance = distance;
             Sj.minDistance = distance * .5f;
-            Sj.spring = 8f; //강도
-            Sj.damper = 8f; //줄어드는 힘
-            Sj.massScale = 8f;
+            Sj.spring = 5f; //강도
+            Sj.damper = 5f; //줄어드는 힘
+            Sj.massScale = 5f;
+
+
+
         }
+
+
+
+    }
+    void RopeSwing()
+    {
+
+        Rigidbody PlayerRigid = Player.GetComponent<Rigidbody>();
+        if (ActionScript.IsFall)
+        {
+            Vector3 ToTarget = (hit.point - Player.position).normalized;
+            float RopeForce = .05f;
+            PlayerRigid.AddForce(ToTarget * RopeForce, ForceMode.Impulse);
+
+
+        }
+        if (ActionScript.xAxis != 0 || ActionScript.zAxis != 0)
+        {
+            PlayerRigid.AddForce(Player.forward * ActionScript.zAxis * .1f);
+            PlayerRigid.AddForce(Player.right * ActionScript.xAxis * .1f);
+        }
+
     }
     void EndShoot()
     {
@@ -89,9 +118,9 @@ public class RopeAction: MonoBehaviour
     }
     void DrawRope()
     {
-        if(IsGrappling)
+        if (IsGrappling)
         {
-            Lr.SetPosition(0,RopePoint.position);
+            Lr.SetPosition(0, RopePoint.position);
         }
 
     }
@@ -101,7 +130,7 @@ public class RopeAction: MonoBehaviour
         Rigidbody PlayerRigid = Player.GetComponent<Rigidbody>();
         Vector3 ToTarget = (hit.point - Player.position).normalized;
         float RopeForce = 20f;
-        PlayerRigid.AddForce(ToTarget*RopeForce, ForceMode.Impulse);
+        PlayerRigid.AddForce(ToTarget * RopeForce, ForceMode.Impulse);
         if (ActionScript.jumpCount == 0)
             ActionScript.jumpCount++;
 
