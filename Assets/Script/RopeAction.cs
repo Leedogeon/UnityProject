@@ -1,3 +1,4 @@
+using Cinemachine.Utility;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections.LowLevel.Unsafe;
@@ -17,8 +18,7 @@ public class RopeAction: MonoBehaviour
     public Transform RopePoint;
     public SpringJoint Sj;
 
-    Transform RTrans;
-
+    Vector3 newForward;
     public float Length; //Rope±Ê¿Ã
     private bool IsGrappling = false;
     private bool IsAttach = false;
@@ -54,14 +54,14 @@ public class RopeAction: MonoBehaviour
                 Attach();
             }
         }
-        RTrans = FollowCamera.transform;
-        RTrans.transform.localRotation = Quaternion.Euler(-25, 0, 0);
+        newForward = Quaternion.LookRotation(FollowCamera.transform.forward) * Quaternion.Euler(-7.5f, 0, 0) * Vector3.forward;
+
 
     }
     void RopeShoot()
     {
         
-        if (Physics.Raycast(RopeArm.transform.position,RTrans.transform.forward,out hit, Length, HitLayer))
+        if (Physics.Raycast(RopeArm.transform.position, newForward,out hit, Length, HitLayer))
         {
             IsGrappling = true;
 

@@ -108,7 +108,7 @@ public class PlayerAction : MonoBehaviour
         FollowCamera.transform.localRotation = Quaternion.Euler(-turn.y, turn.x, 0);
 
         //Head.transform.localRotation = Quaternion.Euler(-turn.y,turn.x, 0);
-        RopeArm.transform.localRotation = Quaternion.Euler(-turn.y - 15, 0, 0);
+        //RopeArm.transform.localRotation = Quaternion.Euler(-turn.y - 15, 0, 0);
 
     }
     void Jump()
