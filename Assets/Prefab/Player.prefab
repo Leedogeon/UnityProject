@@ -263,7 +263,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Player: {fileID: 4098493750915021205}
   RopeArm: {fileID: 5699713556458985210}
-  FollowCamera: {fileID: 0}
+  FollowCamera: {fileID: 866826461235834601, guid: d201c65360df9f741ac69e9c582ff2a7, type: 3}
   HitLayer:
     serializedVersion: 2
     m_Bits: 1024
