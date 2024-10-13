@@ -55,8 +55,7 @@ public class RopeAction : MonoBehaviour
                 Attach();
             }
         }
-        newForward = Quaternion.LookRotation(Player.transform.forward) * Quaternion.Euler(-30 + (-ActionScript.turn.y), 0, 0) * Vector3.forward;
-
+        newForward = Quaternion.LookRotation(Player.transform.forward) * Quaternion.Euler((-ActionScript.turn.y) * 2, 0, 0) * Vector3.forward;
         if (ActionScript.IsFall && IsGrappling)
         {
             RopeSwing();
@@ -64,11 +63,25 @@ public class RopeAction : MonoBehaviour
     }
     void RopeShoot()
     {
+/*        float dis = Length + 1;
+        if (Physics.Raycast(RopeArm.transform.position, newForward, out hit, Length, HitLayer))
+        {
+            dis = Vector3.Distance(Player.transform.position, hit.point);
+        }
+        if (dis <= Length / 4)
+            newForward = Quaternion.LookRotation(Player.transform.forward) * Quaternion.Euler(-7.5f + (-ActionScript.turn.y), 0, 0) * Vector3.forward;
+        else if (dis <= Length / 2)
+            newForward = Quaternion.LookRotation(Player.transform.forward) * Quaternion.Euler(-15f + (-ActionScript.turn.y), 0, 0) * Vector3.forward;
+        else if (dis <= (Length * 3) / 4)
+            newForward = Quaternion.LookRotation(Player.transform.forward) * Quaternion.Euler(-22.5f + (-ActionScript.turn.y), 0, 0) * Vector3.forward;
+        else
+            newForward = Quaternion.LookRotation(Player.transform.forward) * Quaternion.Euler(-30 + (-ActionScript.turn.y), 0, 0) * Vector3.forward;*/
+
 
         if (Physics.Raycast(RopeArm.transform.position, newForward, out hit, Length, HitLayer))
         {
             IsGrappling = true;
-
+            print(hit.collider.tag);
             Lr.positionCount = 2;
             Lr.SetPosition(1, hit.point);
             Sj = Player.gameObject.AddComponent<SpringJoint>();
@@ -84,8 +97,6 @@ public class RopeAction : MonoBehaviour
             Sj.massScale = 5f;
 
         }
-
-
 
     }
     void RopeSwing()
@@ -130,5 +141,9 @@ public class RopeAction : MonoBehaviour
             ActionScript.jumpCount++;
 
         EndShoot();
+    }
+
+    void SetVec()
+    { 
     }
 }
