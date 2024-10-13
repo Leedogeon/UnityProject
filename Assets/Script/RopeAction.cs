@@ -55,7 +55,7 @@ public class RopeAction : MonoBehaviour
                 Attach();
             }
         }
-        newForward = Quaternion.LookRotation(Player.transform.forward) * Quaternion.Euler((-ActionScript.turn.y) * 2, 0, 0) * Vector3.forward;
+        newForward = Quaternion.LookRotation(Player.transform.forward) * Quaternion.Euler((-ActionScript.turn.y) -30, 0, 0) * Vector3.forward;
         if (ActionScript.IsFall && IsGrappling)
         {
             RopeSwing();

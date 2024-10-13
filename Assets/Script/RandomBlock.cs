@@ -35,10 +35,13 @@ public class RandomBlock : MonoBehaviour
             BlockCount++;
             CurPosZ = BlockCount * BlockDistance;
 
+            int randomCount = Random.Range(1, 4);
 
-            GameObject selectedPrefab = GetRandomObject();
+            for(int i = 0; i< randomCount; i++)
+            {
+                CreateBlock();
+            }
 
-            Instantiate(selectedPrefab, new Vector3(0,15,CurPosZ), Quaternion.identity);
         }
     }
 
@@ -47,5 +50,13 @@ public class RandomBlock : MonoBehaviour
         // 리스트에서 랜덤 인덱스 선택
         int randomIndex = Random.Range(0, Blocks.Count);
         return Blocks[randomIndex];
+    }
+    void CreateBlock()
+    {
+        GameObject selectedPrefab = GetRandomObject();
+        int randomX = Random.Range(-15, 15);
+
+        Instantiate(selectedPrefab, new Vector3(randomX, 15, CurPosZ), Quaternion.identity);
+
     }
 }
