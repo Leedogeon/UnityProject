@@ -8,10 +8,12 @@ public class RandomBlock : MonoBehaviour
     [SerializeField] private PlayerAction ActionScript;
     public Transform DestroyLine;
     private int BlockCount = 1;
-    public int BlockDistance = 150;
+    public int BlockDistance = 50;
+    public int WallDistance = 100;
     private int CurPosZ;
 
     public List<GameObject> Blocks = new List<GameObject>();
+    public List<GameObject> Walls  = new List<GameObject>();
 
     // Start is called before the first frame update
     void Start()
@@ -41,7 +43,12 @@ public class RandomBlock : MonoBehaviour
             {
                 CreateBlock();
             }
-
+            int WallPosZ = WallDistance * (BlockCount);
+            for(int i = 0; i<Walls.Count; i++)
+            {
+                Quaternion rotation = Quaternion.Euler(0, (i==0? 180:0), -90);
+                Instantiate(Walls[i],new Vector3(30*(i==0 ? 1:-1), 15, WallPosZ),rotation);
+            }
         }
     }
 

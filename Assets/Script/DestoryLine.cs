@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Transactions;
 using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ public class DestoryLine : MonoBehaviour
     {
         Tags.Add("Block");
         Tags.Add("Floor");
+        Tags.Add("Wall");
     }
     void OnTriggerEnter(Collider other)
     {
@@ -21,7 +23,8 @@ public class DestoryLine : MonoBehaviour
         {
             if (other.CompareTag(Tags[i]))
             {
-                Destroy(other.gameObject);
+                if (Tags[i] == "Wall") Destroy(other.gameObject,3f);
+                else Destroy(other.gameObject);
             }
         }
         
