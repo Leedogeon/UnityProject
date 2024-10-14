@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using static Cinemachine.DocumentationSortingAttribute;
 
@@ -72,6 +73,11 @@ public class PlayerAction : MonoBehaviour
         Turn();
         Jump();
         Attack();
+
+        if(transform.position.y <= -100)
+        {
+            Death();
+        }
     }
 
     void GetInput()
@@ -147,5 +153,10 @@ public class PlayerAction : MonoBehaviour
     void Attack()
     {
 
+    }
+    void Death()
+    {
+        SceneManager.LoadScene("SampleScene");
+        transform.position = Vector3.zero;
     }
 }
