@@ -33,7 +33,6 @@ public class RandomBlock : MonoBehaviour
 
         if (Player.transform.position.z >= CurPosZ)
         {
-            print("position.z = " + Player.transform.position.z);
             BlockCount++;
             CurPosZ = BlockCount * BlockDistance;
 

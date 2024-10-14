@@ -39,28 +39,18 @@ public class PlayerAction : MonoBehaviour
     public float maxX = 45;
     public float MaxY = 30;
 
+    //Score
+    public int MaxDistance;
+
     public PlayerInfo Info = new PlayerInfo();
-    public void SavePlayer()
-    {
-        Save.SavePlayer(this, Info);
-        print("Save Game");
-    }
 
-    public void LoadPlayer()
-    {
-        PlayerDataSave data = Save.LoadPlayer(this, Info);
 
-        Info.Level = data.Level;
-        Info.HP = data.HP;
 
-        CurPos.x = data.position[0];
-        CurPos.y = data.position[1];
-        CurPos.z = data.position[2];
-        transform.position = CurPos;
-        print("Load Game");
-    }
     void Start()
     {
+        PlayerDataSave data = Save.LoadPlayer(this, Info);
+        if(data != null )
+            LoadPlayer();
         rigid = GetComponent<Rigidbody>();
         anim = GetComponentInChildren<Animator>();
         Rope = gameObject.GetComponentInChildren<RopeAction>();
@@ -73,7 +63,7 @@ public class PlayerAction : MonoBehaviour
         Turn();
         Jump();
         Attack();
-
+        RecordScore();
         if(transform.position.y <= -100)
         {
             Death();
@@ -156,7 +146,33 @@ public class PlayerAction : MonoBehaviour
     }
     void Death()
     {
+        SavePlayer();
         SceneManager.LoadScene("SampleScene");
         transform.position = Vector3.zero;
+    }
+
+
+    public void SavePlayer()
+    {
+        Save.SavePlayer(this, Info);
+        print("Save Game");
+    }
+    public void LoadPlayer()
+    {
+        PlayerDataSave data = Save.LoadPlayer(this, Info);
+
+        Info.Level = data.Level;
+        Info.HP = data.HP;
+
+        MaxDistance = data.score;
+/*        CurPos.x = data.position[0];
+        CurPos.y = data.position[1];
+        CurPos.z = data.position[2];*/
+        transform.position = CurPos;
+        print("Load Game");
+    }
+    void RecordScore()
+    {
+        MaxDistance = Math.Max(MaxDistance, (int)transform.position.z);
     }
 }

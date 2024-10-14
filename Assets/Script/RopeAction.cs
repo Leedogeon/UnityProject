@@ -81,7 +81,6 @@ public class RopeAction : MonoBehaviour
         if (Physics.Raycast(RopeArm.transform.position, newForward, out hit, Length, HitLayer))
         {
             IsGrappling = true;
-            print(hit.collider.tag);
             Lr.positionCount = 2;
             Lr.SetPosition(1, hit.point);
             Sj = Player.gameObject.AddComponent<SpringJoint>();

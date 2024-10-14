@@ -7,6 +7,7 @@ public class PlayerDataSave
 {
     public int Level;
     public int HP;
+    public int score;
     public float[] position;
 
     public PlayerDataSave (PlayerAction action,PlayerInfo info)
@@ -17,6 +18,7 @@ public class PlayerDataSave
         position[2] = action.transform.position.z;
         Level = info.Level;
         HP = info.HP;
+        score = action.MaxDistance;
     }
 
 }

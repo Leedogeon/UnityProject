@@ -43,7 +43,7 @@ public static class Save
         }
         else
         {
-            Debug.LogError("Save file not found in " + loadPath);
+            Debug.Log("Save file not found in " + loadPath);
             return null;
         }
     }

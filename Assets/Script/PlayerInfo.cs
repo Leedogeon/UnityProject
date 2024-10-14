@@ -8,5 +8,4 @@ public class PlayerInfo
 {
     public int Level;
     public int HP;
-
 }
