@@ -48,6 +48,7 @@ public class PlayerAction : MonoBehaviour
 
     void Start()
     {
+        MaxDistance = 0;
         PlayerDataSave data = Save.LoadPlayer(this, Info);
         if(data != null )
             LoadPlayer();
@@ -68,8 +69,13 @@ public class PlayerAction : MonoBehaviour
         {
             Death();
         }
+        if (Input.GetButtonDown("AddTest"))
+            AddTest();
     }
-
+    void AddTest()
+    {
+        Death();
+    }
     void GetInput()
     {
         xAxis = Input.GetAxisRaw("Horizontal");
@@ -85,11 +91,6 @@ public class PlayerAction : MonoBehaviour
         else
             jumpCountBase = 1;
 
-        if (Input.GetButtonDown("Save"))
-            SavePlayer();
-
-        if (Input.GetButtonDown("Load"))
-            LoadPlayer();
     }
     void Move()
     {
@@ -163,8 +164,6 @@ public class PlayerAction : MonoBehaviour
 
         Info.Level = data.Level;
         Info.HP = data.HP;
-
-        MaxDistance = data.score;
         transform.position = CurPos;
         print("Load Game");
     }

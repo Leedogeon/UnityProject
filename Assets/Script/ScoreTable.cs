@@ -14,7 +14,7 @@ public class ScoreTable : MonoBehaviour
     private GameObject rank;
     private GameObject score;
     
-    public int Test = 0;
+    public List<int> Scores;
     private void Start()
     {
         string projectPath = Directory.GetParent(Application.dataPath).FullName; // 프로젝트 경로
@@ -26,7 +26,7 @@ public class ScoreTable : MonoBehaviour
             using (FileStream stream = new FileStream(savePath, FileMode.Open))
             {
                 PlayerDataSave data = formatter.Deserialize(stream) as PlayerDataSave;
-                Test = data.score;
+                Scores = data.score;
             }
         }
         LeftRank = GameObject.Find("LeftRank");
@@ -37,7 +37,7 @@ public class ScoreTable : MonoBehaviour
 
     void GenerateScoreboard()
     {
-        for (int i = 1; i < 11; i++)
+        for (int i = 1; i < Scores.Count+1; i++)
         {
             int ranks = i;
 
@@ -55,7 +55,7 @@ public class ScoreTable : MonoBehaviour
             newScorePos.y -= i * 70;  // 동일하게 y값 감소
             newScore.transform.localPosition = newScorePos;
 
-            newScore.GetComponent<TextMeshProUGUI>().text = Test.ToString();
+            newScore.GetComponent<TextMeshProUGUI>().text = Scores[i-1].ToString();
         }
     }
 }

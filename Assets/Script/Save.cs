@@ -20,9 +20,16 @@ public static class Save
             Directory.CreateDirectory(Path.GetDirectoryName(savePath));
         }
 
+        List<int> existingScores = new List<int>();
+        PlayerDataSave existingData = LoadPlayer(action, info);
+        if (existingData != null)
+        {
+            existingScores = existingData.score; // 기존 점수 복사
+        }
+
         using (FileStream stream = new FileStream(savePath, FileMode.Create))
         {
-            PlayerDataSave data = new PlayerDataSave(action, info);
+            PlayerDataSave data = new PlayerDataSave(action, info, existingScores);
             formatter.Serialize(stream, data);
         }
     }
