@@ -165,9 +165,6 @@ public class PlayerAction : MonoBehaviour
         Info.HP = data.HP;
 
         MaxDistance = data.score;
-/*        CurPos.x = data.position[0];
-        CurPos.y = data.position[1];
-        CurPos.z = data.position[2];*/
         transform.position = CurPos;
         print("Load Game");
     }

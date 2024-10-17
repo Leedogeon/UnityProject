@@ -982,6 +982,7 @@ MonoBehaviour:
   turn: {x: 0, y: 0}
   maxX: 45
   MaxY: 30
+  MaxDistance: 0
   Info:
     Level: 0
     HP: 0
@@ -1236,6 +1237,7 @@ GameObject:
   - component: {fileID: 1956313502}
   - component: {fileID: 1956313504}
   - component: {fileID: 1956313503}
+  - component: {fileID: 1956313505}
   m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -1359,6 +1361,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1956313501}
   m_CullTransparentMesh: 1
+--- !u!114 &1956313505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1956313501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13bc30ccb90bb0b46b947e8e0e4c61b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Player: {fileID: 5903297865798274225}
+  scoreText: {fileID: 0}
+  ActionScript: {fileID: 0}
 --- !u!1 &2056691014
 GameObject:
   m_ObjectHideFlags: 0
