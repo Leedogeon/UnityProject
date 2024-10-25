@@ -37,14 +37,16 @@ public class PlayerAction : MonoBehaviour
     public Camera FollowCamera;
     public Vector2 turn;
     public float maxX = 45;
-    public float MaxY = 30;
+    public float MaxY = 45;
 
     //Score
     public int MaxDistance;
 
     public PlayerInfo Info = new PlayerInfo();
 
-
+    public float rayLength = 100f;
+    public LineRenderer lineRenderer;
+    public Color rayColor = Color.blue;
 
     void Start()
     {
@@ -55,10 +57,24 @@ public class PlayerAction : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
         anim = GetComponentInChildren<Animator>();
         Rope = gameObject.GetComponentInChildren<RopeAction>();
+
+        //Forward 확인용
+/*        lineRenderer = GetComponent<LineRenderer>();
+        lineRenderer.startWidth = 0.5f;  // 시작 지점의 두께
+        lineRenderer.endWidth = 0.5f;  // 끝 지점의 두께
+        lineRenderer.startColor = rayColor;
+        lineRenderer.endColor = rayColor;*/
     }
 
     void Update()
     {
+        //Forward 확인용
+        /*        Vector3 forward = transform.forward;
+
+                // Ray의 시작점과 끝점을 설정하여 LineRenderer로 그리기
+                lineRenderer.SetPosition(0, transform.position);  // 시작점
+                lineRenderer.SetPosition(1, transform.position + forward * rayLength);*/
+
         GetInput();
         Move();
         Turn();
@@ -107,7 +123,7 @@ public class PlayerAction : MonoBehaviour
     {
         turn.x += Input.GetAxisRaw("Mouse X");
         turn.y += Input.GetAxisRaw("Mouse Y");
-        //turn.y = Mathf.Clamp(turn.y, -60, MaxY);
+        turn.y = Mathf.Clamp(turn.y, -30, MaxY);
         
         transform.localRotation = Quaternion.Euler(0, turn.x, 0);
         FollowCamera.transform.localRotation = Quaternion.Euler(-turn.y, turn.x, 0);

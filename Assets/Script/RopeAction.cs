@@ -17,10 +17,10 @@ public class RopeAction : MonoBehaviour
     public Transform RopePoint;
     public SpringJoint Sj;
 
-    Vector3 newForward;
     public float Length; //Rope길이
     public bool IsGrappling = false;
     private bool IsAttach = false;
+
 
     [SerializeField] private PlayerAction ActionScript;
     void Start()
@@ -37,6 +37,8 @@ public class RopeAction : MonoBehaviour
 
     void Update()
     {
+        /*Lr.SetPosition(0, Player.transform.position);  // 시작점
+        Lr.SetPosition(1, Player.transform.position + newForward * 50);*/
         if (Input.GetButtonDown("Fire"))
         {
             RopeShoot();
@@ -54,31 +56,20 @@ public class RopeAction : MonoBehaviour
                 Attach();
             }
         }
-        newForward = Quaternion.LookRotation(Player.transform.forward) * Quaternion.Euler((-ActionScript.turn.y) -30, 0, 0) * Vector3.forward;
+
         if (ActionScript.IsFall && IsGrappling)
         {
             RopeSwing();
         }
+
+
+        
     }
     void RopeShoot()
     {
-/*        float dis = Length + 1;
-        if (Physics.Raycast(RopeArm.transform.position, newForward, out hit, Length, HitLayer))
+        if(Physics.Raycast(FollowCamera.transform.position, FollowCamera.transform.forward, out hit, Length, HitLayer))
         {
-            dis = Vector3.Distance(Player.transform.position, hit.point);
-        }
-        if (dis <= Length / 4)
-            newForward = Quaternion.LookRotation(Player.transform.forward) * Quaternion.Euler(-7.5f + (-ActionScript.turn.y), 0, 0) * Vector3.forward;
-        else if (dis <= Length / 2)
-            newForward = Quaternion.LookRotation(Player.transform.forward) * Quaternion.Euler(-15f + (-ActionScript.turn.y), 0, 0) * Vector3.forward;
-        else if (dis <= (Length * 3) / 4)
-            newForward = Quaternion.LookRotation(Player.transform.forward) * Quaternion.Euler(-22.5f + (-ActionScript.turn.y), 0, 0) * Vector3.forward;
-        else
-            newForward = Quaternion.LookRotation(Player.transform.forward) * Quaternion.Euler(-30 + (-ActionScript.turn.y), 0, 0) * Vector3.forward;*/
-
-
-        if (Physics.Raycast(RopeArm.transform.position, newForward, out hit, Length, HitLayer))
-        {
+            float distance = Vector3.Distance(transform.position, hit.point);
             IsGrappling = true;
             Lr.positionCount = 2;
             Lr.SetPosition(1, hit.point);
@@ -87,16 +78,15 @@ public class RopeAction : MonoBehaviour
             Sj.autoConfigureConnectedAnchor = false;
             Sj.connectedAnchor = hit.point;
 
-            float distance = Vector3.Distance(transform.position, hit.point);
             Sj.maxDistance = distance;
             Sj.minDistance = distance * .5f;
-            Sj.spring = 5f; //강도
-            Sj.damper = 5f; //줄어드는 힘
-            Sj.massScale = 5f;
+            Sj.spring = 2f; //강도
+            Sj.damper = 3f; //줄어드는 힘
+            Sj.massScale = 1f;
+        }
 
         }
 
-    }
     void RopeSwing()
     {
 
@@ -105,7 +95,6 @@ public class RopeAction : MonoBehaviour
         Vector3 ToTarget = (hit.point - Player.position).normalized;
         float RopeForce = .05f;
         PlayerRigid.AddForce(ToTarget * RopeForce, ForceMode.Impulse);
-
         if (ActionScript.xAxis != 0 || ActionScript.zAxis != 0)
         {
             PlayerRigid.AddForce(Player.forward * ActionScript.zAxis * .1f);
@@ -115,9 +104,15 @@ public class RopeAction : MonoBehaviour
     }
     void EndShoot()
     {
+
+        print("EndShoot");
         IsGrappling = false;
         Lr.positionCount = 0;
-        Destroy(Sj);
+        if(Sj != null)
+        {
+            Destroy(Sj);
+            Sj = null;
+        }
         IsAttach = false;
     }
     void DrawRope()
@@ -133,7 +128,7 @@ public class RopeAction : MonoBehaviour
         IsAttach = true;
         Rigidbody PlayerRigid = Player.GetComponent<Rigidbody>();
         Vector3 ToTarget = (hit.point - Player.position).normalized;
-        float RopeForce = 20f;
+        float RopeForce = 25f;
         PlayerRigid.AddForce(ToTarget * RopeForce, ForceMode.Impulse);
         if (ActionScript.jumpCount == 0)
             ActionScript.jumpCount++;
@@ -141,7 +136,4 @@ public class RopeAction : MonoBehaviour
         EndShoot();
     }
 
-    void SetVec()
-    { 
-    }
 }
