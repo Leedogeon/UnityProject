@@ -85,7 +85,7 @@ public class RopeAction : MonoBehaviour
             Sj.massScale = 1f;
         }
 
-        }
+    }
 
     void RopeSwing()
     {
@@ -94,7 +94,8 @@ public class RopeAction : MonoBehaviour
 
         Vector3 ToTarget = (hit.point - Player.position).normalized;
         float RopeForce = .05f;
-        PlayerRigid.AddForce(ToTarget * RopeForce, ForceMode.Impulse);
+        PlayerRigid.AddForce(ToTarget * RopeForce, ForceMode.Force);
+        PlayerRigid.AddForce(Vector3.down * 2.5f, ForceMode.Force);
         if (ActionScript.xAxis != 0 || ActionScript.zAxis != 0)
         {
             PlayerRigid.AddForce(Player.forward * ActionScript.zAxis * .1f);
@@ -104,8 +105,6 @@ public class RopeAction : MonoBehaviour
     }
     void EndShoot()
     {
-
-        print("EndShoot");
         IsGrappling = false;
         Lr.positionCount = 0;
         if(Sj != null)
@@ -128,7 +127,7 @@ public class RopeAction : MonoBehaviour
         IsAttach = true;
         Rigidbody PlayerRigid = Player.GetComponent<Rigidbody>();
         Vector3 ToTarget = (hit.point - Player.position).normalized;
-        float RopeForce = 25f;
+        float RopeForce = 20f;
         PlayerRigid.AddForce(ToTarget * RopeForce, ForceMode.Impulse);
         if (ActionScript.jumpCount == 0)
             ActionScript.jumpCount++;
